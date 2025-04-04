@@ -10,9 +10,10 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@nuxt/ui": "^3.0.2",
+    "financed_core": "workspace:*",
     "nuxt": "^3.16.2",
     "vue": "^3.5.13",
-    "vue-router": "^4.5.0",
-    "financed_core": "workspace:*"
+    "vue-router": "^4.5.0"
   }
 }
