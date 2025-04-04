@@ -1,0 +1,19 @@
+{
+  "name": "financed_core",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "build:wasm": "wasm-pack build --target web",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "main": "./pkg/financed_core.js",
+  "types": "./pkg/financed_core.d.ts",
+  "files": [
+    "./pkg/financed_core_bg.wasm",
+    "./pkg/financed_core.js",
+    "./pkg/financed_core.d.ts"
+  ],
+  "license": "ISC"
+}

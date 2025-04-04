@@ -1,0 +1,5 @@
+[workspace]
+members = [
+    "./crates/financed_core",
+]
+resolver = "3"
