@@ -1,6 +1,3 @@
-use wasm_bindgen::prelude::*;
-
-#[wasm_bindgen]
-pub fn a() -> String {
-    return "b".to_string()
-}
+mod utils;
+pub mod black_scholes_model;
+pub mod units;
