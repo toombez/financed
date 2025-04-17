@@ -1,22 +1,22 @@
 #[derive(Debug, Clone, Hash)]
 #[derive(PartialEq, Eq, PartialOrd, Ord)]
-pub struct InstrumentId(String);
+pub struct InstrumentId(pub String);
 
 #[derive(Debug, Clone, Hash)]
 #[derive(PartialEq, Eq, PartialOrd, Ord)]
-pub struct InstrumentName(String);
+pub struct InstrumentName(pub String);
 
 #[derive(Debug, Clone, Hash)]
 #[derive(PartialEq, Eq, PartialOrd, Ord)]
-pub struct Currency(String);
+pub struct Currency(pub String);
 
 #[derive(Debug, Clone, Copy, Hash)]
 #[derive(PartialEq, PartialOrd, Eq, Ord)]
-pub struct LotSize(u32);
+pub struct LotSize(pub u32);
 
 #[derive(Debug, Clone, Hash)]
 #[derive(PartialEq, Eq, PartialOrd, Ord)]
-pub struct Exchange(String);
+pub struct Exchange(pub String);
 
 #[derive(Debug, Clone)]
 pub struct FinancialInstrument {

@@ -2,19 +2,19 @@ use chrono::NaiveDateTime;
 
 #[derive(Debug, Clone, Copy, Hash)]
 #[derive(PartialEq, Eq, PartialOrd, Ord)]
-pub struct ExpirationDate(NaiveDateTime);
+pub struct ExpirationDate(pub NaiveDateTime);
 
 #[derive(Debug, Clone, Copy)]
 #[derive(PartialEq, PartialOrd)]
-pub struct StrikePrice(f64);
+pub struct StrikePrice(pub f64);
 
 #[derive(Debug, Clone, Hash)]
 #[derive(PartialEq, Eq, PartialOrd, Ord)]
-pub struct UnderlyingAsset(String);
+pub struct UnderlyingAsset(pub String);
 
 #[derive(Debug, Clone, Copy)]
 #[derive(PartialEq, PartialOrd)]
-pub struct ImpliedVolatility(f64);
+pub struct ImpliedVolatility(pub f64);
 
 #[derive(Debug, Clone)]
 pub struct DerivativeData {
