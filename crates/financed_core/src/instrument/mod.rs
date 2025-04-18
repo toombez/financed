@@ -1,19 +1,20 @@
+pub mod currency;
+pub mod instrument_metadata;
+pub mod stock_data;
+pub mod option_data;
 
-use derivative_data::DerivativeData;
-use financial_instrument::FinancialInstrument;
-
-pub mod financial_instrument;
-pub mod derivative_data;
+use instrument_metadata::InstrumentMetadata;
+use option_data::OptionData;
+use stock_data::StockData;
 
 #[derive(Debug, Clone)]
-pub enum InstrumentType {
-    Stock,
-    Option(DerivativeData),
-    Future(DerivativeData),
+pub enum InstrumentData {
+    Stock(StockData),
+    Option(OptionData),
 }
 
 #[derive(Debug, Clone)]
 pub struct Instrument {
-    pub base: FinancialInstrument,
-    pub instrument_type: InstrumentType,
+    pub metadata: InstrumentMetadata,
+    pub data: InstrumentData,
 }
