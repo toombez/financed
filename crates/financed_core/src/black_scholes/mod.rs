@@ -45,9 +45,11 @@ impl BlackScholes {
             _ => return Err(BlackScholesError::InvalidInstrumentType),
         };
 
+        let expiration_date: NaiveDateTime = option_data.expiration_date.into();
+
         let time_delta_in_years = Self::calculate_time_to_expiry(
             self.settings.from_date.date(),
-            option_data.expiration_date.value.date()
+            expiration_date.into(),
         );
 
         let (d1, d2) = Self::calculate_d(

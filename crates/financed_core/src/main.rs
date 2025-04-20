@@ -1,4 +1,4 @@
-use chrono::{Days, NaiveDateTime, Utc};
+use chrono::{Days, NaiveDateTime, NaiveTime, Utc};
 use financed_core::{black_scholes::{BlackScholes, BlackScholesContract, BlackScholesSettings}, instrument::{currency::{CurrencyId, CurrencyName, MoneyCurrencyData, RiskFreeRate}, instrument_metadata::{Exchange, InstrumentId, InstrumentMetadata, InstrumentName, LotSize, Price}, option_data::{ExpirationDate, ImpliedVolatility, OptionData, StrikePrice}, stock_data::{DividendYield, HistoricalVolatility, StockData}, Instrument}};
 
 fn main() {
@@ -10,7 +10,7 @@ fn main() {
 
     let t_invest_exchange = Exchange::new("T Invest".to_string());
 
-    println!("{rub_currency:?}");
+    // println!("{rub_currency:?}");
 
     let mtlr_stock = Instrument {
         data: financed_core::instrument::InstrumentData::Stock(StockData {
@@ -27,7 +27,7 @@ fn main() {
         }
     };
 
-    println!("{mtlr_stock:?}");
+    // println!("{mtlr_stock:?}");
 
     let lkoh_stock = Instrument {
         data: financed_core::instrument::InstrumentData::Stock(StockData {
@@ -44,13 +44,11 @@ fn main() {
         }
     };
 
-    println!("{lkoh_stock:?}");
+    // println!("{lkoh_stock:?}");
 
     let lkoh_option = Instrument {
         data: financed_core::instrument::InstrumentData::Option(OptionData {
-            expiration_date: ExpirationDate {
-                value: NaiveDateTime::parse_from_str("2015-09-05 23:56:04", "%Y-%m-%d %H:%M:%S").unwrap()
-            },
+            expiration_date: ExpirationDate::new("2015-09-05 23:56:04".to_string()),
             implied_volatility: ImpliedVolatility::new(1.1),
             option_style: financed_core::instrument::option_data::ExerciceStyle::European,
             option_type: financed_core::instrument::option_data::OptionType::Call,
@@ -67,7 +65,7 @@ fn main() {
         }
     };
 
-    println!("{lkoh_option:?}");
+    // println!("{lkoh_option:?}");
 
     if let financed_core::instrument::currency::Currency::Money(money) = &mut rub_currency {
         money.risk_free_rate = RiskFreeRate::new(0.05);
@@ -92,9 +90,9 @@ fn main() {
 
     let test_option = Instrument {
         data: financed_core::instrument::InstrumentData::Option(OptionData {
-            expiration_date: ExpirationDate {
-                value: now.checked_add_days(Days::new(60)).unwrap().naive_utc()
-            },
+            expiration_date: ExpirationDate::new(
+                now.checked_add_days(Days::new(60)).unwrap().with_time(NaiveTime::from_hms_opt(0, 0, 0).unwrap()).unwrap().format("%Y-%m-%d %H:%M:%S").to_string()
+            ),
             implied_volatility: ImpliedVolatility::new(0.15),
             option_style: financed_core::instrument::option_data::ExerciceStyle::European,
             option_type: financed_core::instrument::option_data::OptionType::Put,
