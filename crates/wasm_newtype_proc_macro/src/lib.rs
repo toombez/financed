@@ -1,3 +1,20 @@
+//! # Usage
+//!
+//! ```rust
+//! use wasm_newtype::prelude::*;
+//! use wasm_newtype_proc_macro::wasm_newtype;
+//!
+//! #[derive(Debug, Clone)]
+//! #[derive(Serialize, Deserialize)]
+//! #[derive(PartialEq, PartialOrd)]
+//! #[wasm_newtype]
+//! pub struct UserId {
+//!     #[validate(range(min = 18.0, max = 20.0, message = "value out of range"))]
+//!     value: f64
+//! }
+//! ```
+
+
 use proc_macro::TokenStream;
 use syn::{self, parse_macro_input, Data, DeriveInput, Fields};
 use quote::quote;
