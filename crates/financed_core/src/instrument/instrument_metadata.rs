@@ -1,24 +1,42 @@
+use wasm_newtype::prelude::*;
+use wasm_newtype_proc_macro::wasm_newtype;
+
 use super::currency::Currency;
 
 #[derive(Debug, Clone, Hash)]
 #[derive(PartialEq, Eq, PartialOrd, Ord)]
-pub struct InstrumentId(pub String);
+#[wasm_newtype]
+pub struct InstrumentId {
+    value: String,
+}
 
 #[derive(Debug, Clone, Hash)]
 #[derive(PartialEq, Eq, PartialOrd, Ord)]
-pub struct InstrumentName(pub String);
+#[wasm_newtype]
+pub struct InstrumentName {
+    value: String,
+}
 
 #[derive(Debug, Clone, Hash)]
 #[derive(PartialEq, Eq, PartialOrd, Ord)]
-pub struct Exchange(pub String);
+#[wasm_newtype]
+pub struct Exchange {
+    value: String,
+}
 
 #[derive(Debug, Clone)]
 #[derive(PartialEq, PartialOrd)]
-pub struct Price(pub f64);
+#[wasm_newtype]
+pub struct Price {
+    value: f64,
+}
 
 #[derive(Debug, Clone)]
 #[derive(PartialEq, PartialOrd)]
-pub struct LotSize(pub f64);
+#[wasm_newtype]
+pub struct LotSize {
+    value: f64,
+}
 
 #[derive(Debug, Clone)]
 pub struct InstrumentMetadata {

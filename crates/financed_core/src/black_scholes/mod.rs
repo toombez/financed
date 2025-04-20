@@ -42,35 +42,37 @@ impl BlackScholes {
         let dividend_yield = spot_data.dividend_yield;
         let risk_free_rate = match contract.underlying_asset.metadata.currency {
             Currency::Money(money) => money.risk_free_rate,
-            // _ => return Err(BlackScholesError::InvalidInstrumentType),
+            _ => return Err(BlackScholesError::InvalidInstrumentType),
         };
+
+        let expiration_date: NaiveDateTime = option_data.expiration_date.into();
 
         let time_delta_in_years = Self::calculate_time_to_expiry(
             self.settings.from_date.date(),
-            option_data.expiration_date.0.date()
+            expiration_date.into(),
         );
 
         let (d1, d2) = Self::calculate_d(
-            spot_price.0,
-            strike_price.0,
+            spot_price.get_value(),
+            strike_price.get_value(),
             time_delta_in_years,
-            risk_free_rate.0,
-            volatility.0,
+            risk_free_rate.get_value(),
+            volatility.get_value(),
             None,
         );
 
-        let f = spot_price.0
-            * ((risk_free_rate.0 - dividend_yield.0) * time_delta_in_years)
+        let f = spot_price.get_value()
+            * ((risk_free_rate.get_value() - dividend_yield.get_value()) * time_delta_in_years)
                 .exp();
 
         match option_data.option_type {
             OptionType::Call => {
-                Ok((-risk_free_rate.0 * time_delta_in_years).exp()
-                    * (f * norm_cdf(d1) - strike_price.0 * norm_cdf(d2)))
+                Ok((-risk_free_rate.get_value() * time_delta_in_years).exp()
+                    * (f * norm_cdf(d1) - strike_price.get_value() * norm_cdf(d2)))
             }
             OptionType::Put => {
-                Ok((-risk_free_rate.0 * time_delta_in_years).exp()
-                    * (strike_price.0 * norm_cdf(-d2) - f * norm_cdf(-d1)))
+                Ok((-risk_free_rate.get_value() * time_delta_in_years).exp()
+                    * (strike_price.get_value() * norm_cdf(-d2) - f * norm_cdf(-d1)))
             }
         }
     }

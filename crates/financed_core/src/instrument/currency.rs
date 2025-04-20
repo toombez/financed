@@ -1,14 +1,26 @@
-#[derive(Debug, Clone, Hash)]
-#[derive(PartialEq, Eq, PartialOrd, Ord)]
-pub struct CurrencyId(pub String);
+use wasm_newtype::prelude::*;
+use wasm_newtype_proc_macro::wasm_newtype;
 
 #[derive(Debug, Clone, Hash)]
 #[derive(PartialEq, Eq, PartialOrd, Ord)]
-pub struct CurrencyName(pub String);
+#[wasm_newtype]
+pub struct CurrencyId {
+    value: String,
+}
+
+#[derive(Debug, Clone, Hash)]
+#[derive(PartialEq, Eq, PartialOrd, Ord)]
+#[wasm_newtype]
+pub struct CurrencyName {
+    value: String,
+}
 
 #[derive(Debug, Clone)]
 #[derive(PartialEq, PartialOrd)]
-pub struct RiskFreeRate(pub f64);
+#[wasm_newtype]
+pub struct RiskFreeRate {
+    value: f64,
+}
 
 #[derive(Debug, Clone)]
 pub struct MoneyCurrencyData {
