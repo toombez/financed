@@ -7,11 +7,22 @@ use validator::ValidationError;
 #[derive(Debug, Clone)]
 #[derive(Serialize, Deserialize)]
 #[wasm_bindgen(getter_with_clone)]
-pub struct  WasmNewtypeValidationErrorData {
+pub struct WasmNewtypeValidationErrorData {
     #[wasm_bindgen(readonly)]
     pub code: String,
     #[wasm_bindgen(readonly)]
     pub message: Option<String>,
+}
+
+#[wasm_bindgen]
+impl WasmNewtypeValidationErrorData {
+    #[wasm_bindgen(getter)]
+    pub fn is_has_message(&self) -> bool {
+        match &self.message {
+            Some(_) => true,
+            None => false,
+        }
+    }
 }
 
 #[derive(Error, Debug, Clone)]
