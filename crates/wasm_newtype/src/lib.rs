@@ -4,6 +4,8 @@ use validator::{Validate, ValidationErrors};
 use wasm_bindgen::{prelude::wasm_bindgen, JsValue};
 use validator::ValidationError;
 
+pub mod prelude;
+
 #[derive(Debug, Clone)]
 #[derive(Serialize, Deserialize)]
 #[wasm_bindgen(getter_with_clone)]
