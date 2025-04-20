@@ -1,3 +1,5 @@
+use wasm_newtype::prelude::*;
+use wasm_newtype_proc_macro::wasm_newtype;
 use chrono::NaiveDateTime;
 
 use super::instrument_metadata::InstrumentId;
@@ -16,15 +18,23 @@ pub enum ExerciceStyle {
 
 #[derive(Debug, Clone)]
 #[derive(PartialEq, PartialOrd)]
-pub struct StrikePrice(pub f64);
+#[wasm_newtype]
+pub struct StrikePrice {
+    value: f64,
+}
 
 #[derive(Debug, Clone)]
 #[derive(PartialEq, PartialOrd)]
-pub struct ImpliedVolatility(pub f64);
+#[wasm_newtype]
+pub struct ImpliedVolatility {
+    value: f64,
+}
 
 #[derive(Debug, Clone)]
 #[derive(PartialEq, PartialOrd)]
-pub struct ExpirationDate(pub NaiveDateTime);
+pub struct ExpirationDate {
+    pub value: NaiveDateTime,
+}
 
 #[derive(Debug, Clone)]
 pub struct OptionData {
