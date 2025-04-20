@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
-use validator::Validate;
+use validator::{Validate, ValidationErrors};
 use wasm_bindgen::{prelude::wasm_bindgen, JsValue};
 use validator::ValidationError;
 
@@ -31,6 +31,27 @@ impl WasmNewtypeValidationErrorData {
 #[error("Validation error for newtype struct")]
 pub struct WasmNewtypeValidationError {
     pub errors: Vec<WasmNewtypeValidationErrorData>
+}
+
+impl From<ValidationErrors> for WasmNewtypeValidationError {
+    fn from(value: ValidationErrors) -> Self {
+        value
+            .field_errors()
+            .get("value")
+            .map(|errors|
+                WasmNewtypeValidationError { errors: errors
+                    .iter()
+                    .map(WasmNewtypeValidationErrorData::from)
+                    .collect()
+            })
+            .unwrap()
+    }
+}
+
+impl From<&ValidationErrors> for WasmNewtypeValidationError {
+    fn from(value: &ValidationErrors) -> Self {
+        Self::from(value.clone())
+    }
 }
 
 impl From<ValidationError> for WasmNewtypeValidationErrorData {
