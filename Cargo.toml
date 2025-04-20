@@ -2,5 +2,6 @@
 members = [
     "crates/financed_core",
     "crates/wasm_newtype",
+    "crates/wasm_newtype_proc_macro",
 ]
 resolver = "3"
