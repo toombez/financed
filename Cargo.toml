@@ -1,5 +1,6 @@
 [workspace]
 members = [
     "crates/financed_core",
+    "crates/wasm_newtype",
 ]
 resolver = "3"
