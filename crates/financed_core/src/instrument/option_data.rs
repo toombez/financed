@@ -6,19 +6,24 @@ use regex::Regex;
 
 use super::instrument_metadata::InstrumentId;
 
+#[derive(Serialize, Deserialize)]
 #[derive(Debug, Clone, Copy, Hash)]
+#[wasm_bindgen]
 pub enum OptionType {
     Call,
     Put,
 }
 
+#[derive(Serialize, Deserialize)]
 #[derive(Debug, Clone, Copy, Hash)]
+#[wasm_bindgen]
 pub enum ExerciceStyle {
     American,
     European,
 }
 
 #[derive(Debug, Clone)]
+#[derive(Serialize, Deserialize)]
 #[derive(PartialEq, PartialOrd)]
 #[wasm_newtype]
 pub struct StrikePrice {
@@ -26,6 +31,7 @@ pub struct StrikePrice {
 }
 
 #[derive(Debug, Clone)]
+#[derive(Serialize, Deserialize)]
 #[derive(PartialEq, PartialOrd)]
 #[wasm_newtype]
 pub struct ImpliedVolatility {
@@ -37,6 +43,7 @@ static EXPIRATION_DATE_STRING_REGEX: LazyLock<Regex> = LazyLock::new(|| {
 });
 
 #[derive(Debug, Clone)]
+#[derive(Serialize, Deserialize)]
 #[derive(PartialEq, PartialOrd)]
 #[wasm_newtype]
 pub struct ExpirationDate {
@@ -57,6 +64,8 @@ impl From<NaiveDateTime> for ExpirationDate {
 }
 
 #[derive(Debug, Clone)]
+#[derive(Serialize, Deserialize)]
+#[wasm_bindgen(getter_with_clone)]
 pub struct OptionData {
     pub option_type: OptionType,
     pub option_style: ExerciceStyle,
@@ -65,4 +74,25 @@ pub struct OptionData {
     pub implied_volatility: ImpliedVolatility,
     pub expiration_date: ExpirationDate,
     pub underlying_asset: InstrumentId,
+}
+
+#[wasm_bindgen]
+impl OptionData {
+    #[wasm_bindgen(constructor)]
+    pub fn new(option_type: OptionType,
+        option_style: ExerciceStyle,
+        strike_price: StrikePrice,
+        implied_volatility: ImpliedVolatility,
+        expiration_date: ExpirationDate,
+        underlying_asset: InstrumentId
+    ) -> Self {
+            Self {
+                expiration_date,
+                implied_volatility,
+                option_style,
+                option_type,
+                strike_price,
+                underlying_asset,
+        }
+    }
 }
