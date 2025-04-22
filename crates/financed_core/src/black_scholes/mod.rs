@@ -1,29 +1,88 @@
+use std::sync::LazyLock;
+
 use anyhow::Result;
 use chrono::{Months, NaiveDate, NaiveDateTime};
+use regex::Regex;
+use wasm_newtype_proc_macro::wasm_newtype;
+use wasm_newtype::prelude::*;
 
 use crate::instrument::{currency::Currency, option_data::OptionType, Instrument, InstrumentData};
 use crate::utils::norm_cdf;
 
-#[derive(Debug,)]
-pub struct BlackScholesSettings {
-    pub from_date: NaiveDateTime,
+static EXPIRATION_DATE_STRING_REGEX: LazyLock<Regex> = LazyLock::new(|| {
+    Regex::new(r"(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})").unwrap()
+});
+
+#[derive(Debug, Clone)]
+#[wasm_newtype]
+pub struct FromDate {
+    #[validate(regex(path = *EXPIRATION_DATE_STRING_REGEX, message = "From date must be formatted with `%Y-%m-%d %H:%M:%S`"))]
+    value: String,
 }
 
+impl Into<NaiveDateTime> for FromDate {
+    fn into(self) -> NaiveDateTime {
+        NaiveDateTime::parse_from_str(&self.get_value(), "%Y-%m-%d %H:%M:%S").unwrap()
+    }
+}
+
+#[derive(Debug, Clone)]
+#[wasm_bindgen(getter_with_clone)]
+pub struct BlackScholesSettings {
+    pub from_date: FromDate,
+}
+
+#[wasm_bindgen]
+impl BlackScholesSettings {
+    #[wasm_bindgen(constructor)]
+    pub fn new(from_date: FromDate) -> Self {
+        Self { from_date }
+    }
+}
+
+#[derive(Debug, Clone)]
+#[wasm_bindgen(getter_with_clone)]
 pub struct BlackScholes {
     pub settings: BlackScholesSettings,
 }
 
+#[wasm_bindgen]
+impl BlackScholes {
+    #[wasm_bindgen(constructor)]
+    pub fn new(settings: BlackScholesSettings) -> Self {
+        Self {
+            settings
+        }
+    }
+}
+
 #[derive(Debug, Clone, Copy)]
+#[wasm_bindgen]
 pub enum BlackScholesError {
     InvalidInstrumentType,
 }
 
+#[derive(Debug, Clone)]
+#[wasm_bindgen(getter_with_clone)]
 pub struct BlackScholesContract {
     pub underlying_asset: Instrument,
     pub option: Instrument,
 }
 
+#[wasm_bindgen]
+impl BlackScholesContract {
+    #[wasm_bindgen(constructor)]
+    pub fn new(option: Instrument, underlying_asset: Instrument) -> Self {
+        Self {
+            option,
+            underlying_asset,
+        }
+    }
+}
+
+#[wasm_bindgen]
 impl BlackScholes {
+    #[wasm_bindgen]
     pub fn calculate_price(&self, contract: BlackScholesContract) -> Result<f64, BlackScholesError> {
         let spot_data = match contract.underlying_asset.data {
             InstrumentData::Stock(data) => data,
@@ -46,9 +105,10 @@ impl BlackScholes {
         };
 
         let expiration_date: NaiveDateTime = option_data.expiration_date.into();
+        let from_date: NaiveDateTime = self.settings.from_date.clone().into();
 
         let time_delta_in_years = Self::calculate_time_to_expiry(
-            self.settings.from_date.date(),
+            from_date.into(),
             expiration_date.into(),
         );
 
