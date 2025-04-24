@@ -120,7 +120,7 @@ fn main() {
         }
     };
 
-    let price = model.calculate_price(contract);
+    let price = model.calculate_price(&contract);
 
     println!("{price:?}");
 }
