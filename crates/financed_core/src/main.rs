@@ -1,5 +1,5 @@
 use chrono::{Days, NaiveDateTime, NaiveTime, Utc};
-use financed_core::{black_scholes::{BlackScholes, BlackScholesContract, BlackScholesSettings}, instrument::{currency::{CurrencyId, CurrencyName, MoneyCurrencyData, RiskFreeRate}, instrument_metadata::{Exchange, InstrumentId, InstrumentMetadata, InstrumentName, LotSize, Price}, option_data::{ExpirationDate, ImpliedVolatility, OptionData, StrikePrice}, stock_data::{DividendYield, HistoricalVolatility, StockData}, Instrument}};
+use financed_core::{black_scholes::{BlackScholes, BlackScholesContract, BlackScholesSettings, FromDate}, instrument::{currency::{CurrencyId, CurrencyName, MoneyCurrencyData, RiskFreeRate}, instrument_metadata::{Exchange, InstrumentId, InstrumentMetadata, InstrumentName, LotSize, Price}, option_data::{ExpirationDate, ImpliedVolatility, OptionData, StrikePrice}, stock_data::{DividendYield, HistoricalVolatility, StockData}, Instrument}};
 
 fn main() {
     let mut rub_currency = financed_core::instrument::currency::Currency::Money(MoneyCurrencyData {
@@ -116,11 +116,11 @@ fn main() {
 
     let model = BlackScholes {
         settings: BlackScholesSettings {
-            from_date: now.naive_utc(),
+            from_date: FromDate::new(now.naive_utc().format("%Y-%m-%d %H:%M:%S").to_string()),
         }
     };
 
-    let price = model.calculate_price(contract);
+    let price = model.calculate_price(&contract);
 
     println!("{price:?}");
 }

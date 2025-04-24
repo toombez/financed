@@ -27,6 +27,7 @@ validator = { version = "0.20.0", features = ["derive"] }
 wasm_newtype = { path = "../wasm_newtype" }
 js-sys = "0.3.77"
 regex = "1.11.1"
+tsify = {version = "0.5.5", features = ["js"]}
 
 [target.wasm32-unknown-unknown]
 rustflags = ["-C", "target-feature=+atomics,+bulk-memory,+mutable-globals"]

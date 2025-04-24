@@ -6,6 +6,7 @@ use super::currency::Currency;
 #[derive(Debug, Clone, Hash)]
 #[derive(PartialEq, Eq, PartialOrd, Ord)]
 #[wasm_newtype]
+#[derive(Serialize, Deserialize)]
 pub struct InstrumentId {
     value: String,
 }
@@ -39,6 +40,7 @@ pub struct LotSize {
 }
 
 #[derive(Debug, Clone)]
+#[wasm_bindgen(getter_with_clone)]
 pub struct InstrumentMetadata {
     pub id: InstrumentId,
     pub name: InstrumentName,
@@ -46,4 +48,25 @@ pub struct InstrumentMetadata {
     pub currency: Currency,
     pub price: Price,
     pub lot_size: LotSize,
+}
+
+#[wasm_bindgen]
+impl InstrumentMetadata {
+    #[wasm_bindgen(constructor)]
+    pub fn new(id: InstrumentId,
+        name: InstrumentName,
+        exchange: Exchange,
+        currency: Currency,
+        price: Price,
+        lot_size: LotSize,
+    ) -> Self {
+        Self {
+            currency,
+            exchange,
+            id,
+            lot_size,
+            name,
+            price,
+        }
+    }
 }
